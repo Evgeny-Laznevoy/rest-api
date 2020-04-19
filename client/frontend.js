@@ -8,16 +8,33 @@ new Vue({
                 name: '',
                 value: ''
             },
-            contacts:[]
+            contacts:[
+                {id: 1, name: 'Evgen', value: '+7-982-554-60-60', marked: false}
+            ],
+            disableValue: false
         }
     },
     methods: {
         CreateContact(){
             const {...contact} = this.form
             
-            this.contacts.push({...contact, id: Date.now()})
+            let lastId = this.contacts.length;
+
+            this.contacts.push({...contact, id: ++lastId, marked: false})
 
             this.form.name = this.form.value = ''
+        },
+        markContact(id){
+            const contact = this.contacts.find(c => c.id === id)
+            contact.marked = true
+        },
+        removeContact(id){
+            this.contacts = this.contacts.filter(contact => contact.id !== id)
+        }
+    },
+    computed: {
+        canCreate(){
+            return this.form.value && this.form.name
         }
     },
 })
